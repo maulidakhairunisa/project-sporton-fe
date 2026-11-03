@@ -1,21 +1,18 @@
 import HeroSection from "./components/home/hero";
-import CategoriesSection from "./components/home/categories";
-import ProductSection from "./components/home/products";
+import HomeClient from "./components/home/home-client";
 import { getAllCategories } from "../services/category.service";
 import { getAllProducts } from "../services/product.service";
 
 export default async function Home() {
   const [categories, products] = await Promise.all([
     getAllCategories(),
-    getAllProducts()
+    getAllProducts(),
   ]);
 
-  
   return (
-  <main>
-    <HeroSection/>
-    <CategoriesSection categories={categories}/>
-    <ProductSection products={products}/>
-  </main>
+    <main>
+      <HeroSection />
+      <HomeClient categories={categories} products={products} />
+    </main>
   );
 }

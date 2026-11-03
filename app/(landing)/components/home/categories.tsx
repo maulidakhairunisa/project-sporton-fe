@@ -1,43 +1,64 @@
 import { getImageUrl } from "@/app/lib/api";
 import { Category } from "@/app/types";
 import Image from "next/image";
-import Link from "next/link";
 import { FiArrowRight } from "react-icons/fi";
-
 
 type TCategoriesProps = {
   categories: Category[];
-}
-const CategoriesSection = ({categories}: TCategoriesProps) => {
+  selectedCategoryId?: string | null;
+  onSelectCategory?: (category: Category) => void;
+  onClearCategory?: () => void;
+};
+
+const CategoriesSection = ({
+  categories,
+  selectedCategoryId,
+  onSelectCategory,
+  onClearCategory,
+}: TCategoriesProps) => {
   return (
-    <section id="category-section" className="container mx-auto pb-20">
-      <div className="container px-8 flex justify-between">
+    <section id="category-section" className="container mx-auto pb-20 scroll-mt-24">
+      <div className="container px-8 flex justify-between items-center">
         <h2 className="font-bold text-2xl">Browse By Categories</h2>
-        <Link href="#" className="flex gap-2 text-primary font-medium">
-          <span className="self-center">See All Categories</span>
-          <FiArrowRight className="self-center" />
-        </Link>
+        <button
+          onClick={onClearCategory}
+          className="flex items-center gap-2 text-primary font-medium cursor-pointer hover:opacity-80 transition-opacity"
+        >
+          <span>See All Categories</span>
+          <FiArrowRight />
+        </button>
       </div>
       <div className="px-8 grid grid-cols-6 gap-12 mt-8">
-        {categories.map((category) => (
-          <div
-            className="rounded-lg bg-gradient-to-r from-[#F1F1F1] to-[#F7F7F7] w-full aspect-square flex justify-center"
-            key={category._id}
-          >
-            <div className="self-center">
-              <Image
-                src={getImageUrl(category.imageUrl)}
-                width={86}
-                height="86"
-                alt={category.name}
-                className="mb-[10px]"
-              />
-              <div className="text-primary font-medium text-xl text-center">
-                {category.name}
-              </div>
-            </div>
-          </div>
-        ))}
+        {[...categories]
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map((category) => {
+            const isSelected = selectedCategoryId === category._id;
+            return (
+              <button
+                type="button"
+                onClick={() => onSelectCategory?.(category)}
+                className={`rounded-lg w-full aspect-square flex justify-center items-center cursor-pointer transition-all duration-300 text-left p-4 ${
+                  isSelected
+                    ? "bg-white ring-2 ring-primary shadow-lg scale-105 border border-primary/20"
+                    : "bg-gradient-to-r from-[#F1F1F1] to-[#F7F7F7] hover:shadow-lg hover:scale-105 hover:-translate-y-1"
+                }`}
+                key={category._id}
+              >
+                <div className="flex flex-col items-center justify-center">
+                  <Image
+                    src={getImageUrl(category.imageUrl)}
+                    width={86}
+                    height={86}
+                    alt={category.name}
+                    className="mb-[10px] w-auto h-[86px] object-contain"
+                  />
+                  <div className="text-primary font-medium text-xl text-center">
+                    {category.name}
+                  </div>
+                </div>
+              </button>
+            );
+          })}
       </div>
     </section>
   );

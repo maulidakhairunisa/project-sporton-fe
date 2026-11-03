@@ -1,37 +1,63 @@
-import Image from "next/image"
+import Image from "next/image";
 import ProductActions from "../../components/product-detail/product-actions";
 import priceFormatter from "@/app/utils/price-formatter";
 import { getProductDetail } from "@/app/services/product.service";
+import { getAllCategories } from "@/app/services/category.service";
 import { getImageUrl } from "@/app/lib/api";
-
+import { getProductCategory } from "@/app/utils/category-helper";
 
 export type TPageProps = {
     params: Promise<{ id: string }>;
-}
+};
+
 const ProductDetail = async ({ params }: TPageProps) => {
     const { id } = await params;
 
-    const product = await getProductDetail(id);
-    console.log(product);
-    console.log("product stock", product.stock);
+    const [product, categories] = await Promise.all([
+        getProductDetail(id),
+        getAllCategories().catch(() => []),
+    ]);
+
+    const resolvedCategory = getProductCategory(product, categories);
+    const categoryName = resolvedCategory?.name || "";
+
+    // Ensure product passed to actions has a valid category object
+    const productWithCategory = {
+        ...product,
+        category: resolvedCategory || {
+            _id: "",
+            name: "",
+            description: "",
+            imageUrl: "",
+            createdAt: "",
+            updatedAt: "",
+        },
+    };
+
     return (
         <main className="container mx-auto py-40 flex gap-12 px-8">
-            <div className="bg-primary-light aspect-square min-w-140 flex justify-center items-center">
-                <Image src={getImageUrl(product.imageUrl)} width={550} height={550} alt={product.name} className="aspect-square object-contain w-full" />
+            <div className="bg-primary-light aspect-square min-w-140 flex justify-center items-center rounded-xl overflow-hidden">
+                <Image
+                    src={getImageUrl(product.imageUrl)}
+                    width={550}
+                    height={550}
+                    alt={product.name}
+                    className="aspect-square object-contain w-full"
+                    priority
+                />
             </div>
             <div className="w-full py-7">
                 <h1 className="font-bold text-4xl mb-6">{product.name}</h1>
-                <div className="py-2 px-6 bg-primary-light rounded-full text-primary py-2 px-6 w-fit mb-5">
-                    {product.category?.name}
-                </div>
-                <p className="leading-loose mb-8">{product.description}
-                </p>
+                {categoryName ? (
+                    <div className="py-2 px-6 bg-primary-light rounded-full text-primary w-fit mb-5 font-medium">
+                        {categoryName}
+                    </div>
+                ) : null}
+                <p className="leading-loose mb-8">{product.description}</p>
                 <div className="text-primary text-[32px] font-semibold mb-11">
-                    {
-                        priceFormatter(product.price)
-                    }
+                    {priceFormatter(product.price)}
                 </div>
-                <ProductActions product={product} stock={product.stock} />
+                <ProductActions product={productWithCategory} stock={product.stock} />
             </div>
         </main>
     );
