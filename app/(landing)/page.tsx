@@ -4,6 +4,8 @@ import { getAllCategories } from "../services/category.service";
 import { getAllProducts } from "../services/product.service";
 import { Category, Product } from "../types";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   let categories: Category[] = [];
   let products: Product[] = [];
