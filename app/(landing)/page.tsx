@@ -9,13 +9,15 @@ export default async function Home() {
   let products: Product[] = [];
 
   try {
-    [categories, products] = await Promise.all([
-      getAllCategories(),
-      getAllProducts(),
-    ]);
+    categories = await getAllCategories();
   } catch (error) {
-    console.error("Failed to fetch data:", error);
-    // Render page with empty data instead of crashing
+    console.error("Failed to fetch categories:", error);
+  }
+
+  try {
+    products = await getAllProducts();
+  } catch (error) {
+    console.error("Failed to fetch products:", error);
   }
 
   return (
