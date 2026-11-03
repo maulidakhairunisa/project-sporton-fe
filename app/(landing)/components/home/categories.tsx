@@ -17,18 +17,18 @@ const CategoriesSection = ({
   onClearCategory,
 }: TCategoriesProps) => {
   return (
-    <section id="category-section" className="container mx-auto pb-20 scroll-mt-24">
-      <div className="container px-8 flex justify-between items-center">
-        <h2 className="font-bold text-2xl">Browse By Categories</h2>
+    <section id="category-section" className="container mx-auto pb-16 md:pb-20 scroll-mt-24 px-4 md:px-8">
+      <div className="flex justify-between items-center mb-6 md:mb-8">
+        <h2 className="font-bold text-xl md:text-2xl">Browse By Categories</h2>
         <button
           onClick={onClearCategory}
-          className="flex items-center gap-2 text-primary font-medium cursor-pointer hover:opacity-80 transition-opacity"
+          className="flex items-center gap-1.5 md:gap-2 text-primary font-medium text-sm md:text-base cursor-pointer hover:opacity-80 transition-opacity"
         >
           <span>See All Categories</span>
           <FiArrowRight />
         </button>
       </div>
-      <div className="px-8 grid grid-cols-6 gap-12 mt-8">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6 lg:gap-8">
         {[...categories]
           .sort((a, b) => a.name.localeCompare(b.name))
           .map((category) => {

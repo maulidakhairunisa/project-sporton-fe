@@ -9,46 +9,51 @@ import { Product } from "@/app/types";
 
 type TProductActionsProps = {
     product: Product;
-    stock:number
-}
-const ProductActions = ({product, stock}:TProductActionsProps) => {
-    const {addItem} = useCartStore();
-    const {push} = useRouter();
+    stock: number;
+};
+
+const ProductActions = ({ product, stock }: TProductActionsProps) => {
+    const { addItem } = useCartStore();
+    const { push } = useRouter();
     const [qty, setQty] = useState(1);
 
-    const handleAddToCart = () =>{
-        addItem(product,qty)
+    const handleAddToCart = () => {
+        addItem(product, qty);
     };
 
-    const handleCheckout=()=>{
-        push("/checkout")
-
-    };
     return (
-        <div className="flex gap-5">
-            <div className="border border-gray-500 inline-flex w-fit min-w-20.5">
-                <div className="aspect-square text-xl font-medium border-r border-gray-500 flex justify-center items-center">
+        <div className="flex flex-col sm:flex-row gap-4 w-full">
+            <div className="border border-gray-400 inline-flex w-fit rounded-md overflow-hidden self-start">
+                <div className="w-12 h-11 text-lg font-medium border-r border-gray-400 flex justify-center items-center">
                     <span>{qty}</span>
                 </div>
-                <div className="flex flex-col">
-                    <button className="border-b border-gray-500 cursor-pointer h-1/2 aspect-square flex items-center justify-center"
-                    onClick={()=> setQty(qty < stock ? qty+1 : qty)}>
-                        <FiChevronUp size={18} />
+                <div className="flex flex-col w-8">
+                    <button
+                        type="button"
+                        className="border-b border-gray-400 cursor-pointer h-5.5 flex items-center justify-center hover:bg-gray-100"
+                        onClick={() => setQty(qty < stock ? qty + 1 : qty)}
+                    >
+                        <FiChevronUp size={16} />
                     </button>
-                    <button className="cursor-pointer h-1/2 aspect-square flex items-center justify-center"
-                    onClick={()=> setQty(qty > 1 ? qty-1 : qty)}>
-                        <FiChevronDown size={18} />
+                    <button
+                        type="button"
+                        className="cursor-pointer h-5.5 flex items-center justify-center hover:bg-gray-100"
+                        onClick={() => setQty(qty > 1 ? qty - 1 : qty)}
+                    >
+                        <FiChevronDown size={16} />
                     </button>
                 </div>
             </div>
-            <Button className="px-14 w-full" onClick={handleAddToCart}>
-                <FiShoppingBag size={24} />
-                Add to Cart
-            </Button>
-            <Button variant="dark" className="px-[24] w-full" onClick={() => push("/checkout")}>
-                Checkout Now
-                <FiArrowRight size={14} />
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-3 w-full">
+                <Button className="w-full sm:flex-1 justify-center py-3" onClick={handleAddToCart}>
+                    <FiShoppingBag size={20} />
+                    Add to Cart
+                </Button>
+                <Button variant="dark" className="w-full sm:flex-1 justify-center py-3" onClick={() => push("/checkout")}>
+                    Checkout Now
+                    <FiArrowRight size={16} />
+                </Button>
+            </div>
         </div>
     );
 };

@@ -32,17 +32,17 @@ const ProductSection = ({
   };
 
   return (
-    <section id="products-section" className="container mx-auto mt-32 mb-52 scroll-mt-24">
-      <div className="flex flex-col items-center mb-11">
-        <h2 className="font-bold italic text-4xl text-center">
+    <section id="products-section" className="container mx-auto mt-20 md:mt-32 mb-28 md:mb-52 scroll-mt-24 px-4 md:px-8">
+      <div className="flex flex-col items-center mb-8 md:mb-11 text-center">
+        <h2 className="font-bold italic text-3xl md:text-4xl">
           <span className="text-primary">
             {selectedCategory ? selectedCategory.name.toUpperCase() : "OUR"}{" "}
           </span>
           PRODUCTS
         </h2>
         {selectedCategory && (
-          <div className="flex items-center gap-3 mt-4">
-            <span className="text-sm text-gray-500">
+          <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 mt-4">
+            <span className="text-xs md:text-sm text-gray-500">
               Showing products for{" "}
               <strong className="text-black font-semibold">
                 {selectedCategory.name}
@@ -61,8 +61,8 @@ const ProductSection = ({
       </div>
 
       {products.length === 0 ? (
-        <div className="text-center py-16 px-4 bg-gray-50 rounded-2xl mx-8">
-          <p className="text-gray-500 text-lg mb-4">
+        <div className="text-center py-16 px-4 bg-gray-50 rounded-2xl mx-auto max-w-lg">
+          <p className="text-gray-500 text-base md:text-lg mb-4">
             No products found in category &quot;{selectedCategory?.name}&quot;.
           </p>
           <button
@@ -73,7 +73,7 @@ const ProductSection = ({
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-4 gap-5 px-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
           {[...products]
             .sort((a, b) => a.name.localeCompare(b.name))
             .map((product) => {
