@@ -13,10 +13,24 @@ export type TPageProps = {
 const ProductDetail = async ({ params }: TPageProps) => {
     const { id } = await params;
 
-    const [product, categories] = await Promise.all([
-        getProductDetail(id),
-        getAllCategories().catch(() => []),
-    ]);
+    let product;
+    let categories = [];
+    try {
+        [product, categories] = await Promise.all([
+            getProductDetail(id),
+            getAllCategories().catch(() => []),
+        ]);
+    } catch (error) {
+        console.error("Failed to fetch product:", error);
+        return (
+            <main className="container mx-auto py-40 flex justify-center items-center px-8">
+                <div className="text-center">
+                    <h1 className="font-bold text-2xl mb-4">Produk tidak ditemukan</h1>
+                    <p className="text-gray-500">Gagal memuat data produk. Silakan coba lagi nanti.</p>
+                </div>
+            </main>
+        );
+    }
 
     const resolvedCategory = getProductCategory(product, categories);
     const categoryName = resolvedCategory?.name || "";
