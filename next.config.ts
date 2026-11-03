@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
         hostname: "res.cloudinary.com",
       },
       {
+        protocol: "https",
+        hostname: "project-sporton-be.vercel.app",
+        pathname: "/**",
+      },
+      {
         protocol: "http",
         hostname: "127.0.0.1",
         port: "5001",
